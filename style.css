@@ -474,3 +474,38 @@ details p {
     padding: 22px;
   }
 }
+
+/* 고급스러운 스크롤 등장 애니메이션 */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 카드 hover 모션 */
+.card,
+.resource-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover,
+.resource-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.12);
+}
+
+/* 모션 민감 사용자 배려 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .card,
+  .resource-card {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
