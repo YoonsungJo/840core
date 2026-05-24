@@ -22,7 +22,7 @@ if (menuToggle && navMenu) {
 }
 // 스크롤 시 부드럽게 등장하는 애니메이션
 const revealTargets = document.querySelectorAll(
-  ".section, .card, .resource-card, .qa-box"
+  ".section, .card, .resource-card, .qa-box, details"
 );
 
 revealTargets.forEach((target) => {
