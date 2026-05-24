@@ -2,6 +2,7 @@
    840 Core 기본 스타일
    GitHub Pages용 순수 CSS
 ========================= */
+
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.min.css");
 
 :root {
@@ -112,6 +113,7 @@ a {
   min-height: 620px;
   display: flex;
   align-items: center;
+  overflow: hidden;
   background:
     radial-gradient(circle at top right, rgba(29, 78, 216, 0.14), transparent 32%),
     linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
@@ -119,6 +121,104 @@ a {
 
 .hero-inner {
   padding: 96px 0 110px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+  align-items: center;
+  gap: 56px;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-copy > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-copy > *:nth-child(1) {
+  animation-delay: 0.08s;
+}
+
+.hero-copy > *:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.hero-copy > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.hero-copy > *:nth-child(4) {
+  animation-delay: 0.42s;
+}
+
+@keyframes heroTextIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-logo-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 420px;
+  opacity: 0;
+  transform: translateY(32px) scale(0.96);
+  animation: logoFloatIn 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+
+.hero-logo-wrap::before {
+  content: "";
+  position: absolute;
+  width: min(430px, 78vw);
+  height: min(430px, 78vw);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(29, 78, 216, 0.15), transparent 58%),
+    radial-gradient(circle, rgba(15, 23, 42, 0.08), transparent 68%);
+  filter: blur(8px);
+  transform: translateY(18px);
+}
+
+.hero-logo {
+  position: relative;
+  z-index: 1;
+  width: min(360px, 72vw);
+  height: auto;
+  display: block;
+  filter:
+    drop-shadow(0 30px 58px rgba(15, 23, 42, 0.24))
+    drop-shadow(0 8px 18px rgba(29, 78, 216, 0.14));
+  animation: logoIdleFloat 5.5s ease-in-out 1.6s infinite;
+}
+
+@keyframes logoFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(38px) scale(0.94);
+    filter: blur(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes logoIdleFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-0.4deg);
+  }
+
+  50% {
+    transform: translateY(-12px) rotate(0.4deg);
+  }
 }
 
 .eyebrow,
@@ -250,6 +350,13 @@ a {
   border-radius: var(--radius);
   padding: 28px;
   box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover,
+.resource-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.12);
 }
 
 .card h3,
@@ -384,6 +491,26 @@ details p {
 }
 
 /* =========================
+   Scroll Reveal Motion
+========================= */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  filter: blur(8px);
+  transition:
+    opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* =========================
    Mobile
 ========================= */
 
@@ -425,6 +552,17 @@ details p {
 
   .hero-inner {
     padding: 72px 0 88px;
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .hero-logo-wrap {
+    min-height: 300px;
+    order: -1;
+  }
+
+  .hero-logo {
+    width: min(260px, 68vw);
   }
 
   .hero-description {
@@ -475,37 +613,25 @@ details p {
   }
 }
 
-/* 고급스러운 스크롤 등장 애니메이션 */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
+/* =========================
+   Motion Accessibility
+========================= */
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 카드 hover 모션 */
-.card,
-.resource-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.card:hover,
-.resource-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.12);
-}
-
-/* 모션 민감 사용자 배려 */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-copy > *,
+  .hero-logo-wrap,
+  .hero-logo,
   .reveal,
   .card,
   .resource-card {
+    animation: none;
     transition: none;
     transform: none;
     opacity: 1;
+    filter: none;
   }
 }
